@@ -1,9 +1,8 @@
 #Requires AutoHotkey v2.0.18+
 #SingleInstance Force
-
-placeID := "391104146"
-
-
+SetTitleMatchMode(3)
+CoordMode("ToolTip","Screen")
+SetWinDelay(-1)
 http(verb,url) {
     h := ComObject("WinHttp.WinHttpRequest.5.1")
     h.Open(verb,url)
@@ -37,7 +36,6 @@ msTime() {
         return x//1000
     }
 }
-
 waitForFinish(PID,timeout:=5000) {
     time := msTime()
     if(PID!="") {
@@ -72,22 +70,20 @@ close() {
         }
     }
 }
-join(placeID,jobID) {
-    Run "roblox://experiences/start?placeId=" placeID "&gameInstanceId=" jobID
-}
+ToolTip("PRESS ALT E TO ACTIVATE MACRO BOT`nPRESS ALT X TO CLOSE MACRO",A_ScreenWidth,A_ScreenHeight)
 *!e:: {
     serverHopEvery := Number(InputBox("serverhop every what second?",,,2).Value)*1000
-    toCloneMyselfIn := getServerList(placeID)
+    if(WinExist("Roblox")) {
+        WinHide("Roblox")
+    }
+    toCloneMyselfIn := getServerList("391104146")
     timeSinceAPI := A_Now
+    ToolTip("MACRO BOT IS ACTIVE`nPRESS ALT R TO STOP`nPRESS ALT X TO CLOSE MACRO",A_ScreenWidth,A_ScreenHeight)
     while true {
         if(DateDiff(A_Now,timeSinceAPI,"Seconds")>60) {
-            toCloneMyselfIn := getServerList(placeID)
+            toCloneMyselfIn := getServerList("391104146")
             timeSinceAPI := A_Now
         }
-        if(!Mod(A_Index,4)) {
-            close()
-        }
-        str := "press alt r to stop`n`nservers: " toCloneMyselfIn.Length "`n`n"
         loop toCloneMyselfIn.Length {
             rand := Ceil(Random()*toCloneMyselfIn.Length)
             if(!rand) {
@@ -97,17 +93,37 @@ join(placeID,jobID) {
             toCloneMyselfIn[A_Index] := toCloneMyselfIn[rand]
             toCloneMyselfIn[rand] := temp
         }
+		if(!Mod(A_Index,4)) {
+			close()
+			WinWait("Roblox",,10)
+			if(WinExist("Roblox")) {
+				WinHide("Roblox")
+			}
+		}
         loop toCloneMyselfIn.Length {
             job := toCloneMyselfIn[A_Index]["id"]
-            str .=  A_Index ". " job "`n"
-            ToolTip(str)
-            join(placeID,job)
+            if(WinExist("Roblox")) {
+                WinHide("Roblox")
+            }
+			try {
+            	Run "roblox://experiences/start?placeId=391104146&gameInstanceId=" job
+                WinClose("Pick an app")
+			}
             Sleep serverHopEvery
         }
     }
 }
 *!r::{
+    try {
+        WinShow("Roblox")
+    }
     Reload()
+    ExitApp()
+}
+*!x::{
+    try {
+        WinShow("Roblox")
+    }
     ExitApp()
 }
 ;CREDITS GO TO https://github.com/TheArkive/JXON_ahk2
@@ -219,7 +235,3 @@ Jxon_Load(&src, args*) {
 	
 	return tree[1]
 }
-
-while(MsgBox("press alt e to start macro`n`npress alt r to stop macro`n`npress no to close macro",,"0x4")!="no") {
-}
-ExitApp()
