@@ -95,10 +95,16 @@ ToolTip("PRESS ALT E TO ACTIVATE MACRO BOT`nPRESS ALT X TO CLOSE MACRO",A_Screen
         }
 		if(!Mod(A_Index,4)) {
 			close()
-			WinWait("Roblox",,10)
-			if(WinExist("Roblox")) {
-				WinHide("Roblox")
-			}
+            Run "roblox://experiences/start?placeId=1"
+            time := msTime()
+            redo:
+			try {
+                WinHide("Roblox")
+            } catch {
+                if(msTime()-time<10000) {
+                    goto redo
+                }
+            }
 		}
         loop toCloneMyselfIn.Length {
             job := toCloneMyselfIn[A_Index]["id"]
