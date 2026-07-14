@@ -72,7 +72,7 @@ close() {
 }
 ToolTip("PRESS ALT E TO ACTIVATE MACRO BOT`nPRESS ALT X TO CLOSE MACRO",A_ScreenWidth,A_ScreenHeight)
 *!e:: {
-    serverHopEvery := Number(InputBox("serverhop every what second?",,,3).Value)*1000
+    serverHopEvery := Number(InputBox("serverhop every what second?",,,2).Value)*1000
     if(WinExist("Roblox")) {
         WinHide("Roblox")
     }
