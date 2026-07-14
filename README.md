@@ -4,7 +4,7 @@ autohotkey v2 is required to run this
 
 if enough people use this then foxbin might return
 
-The 2 second setting works best for me. If you try other setting then check how well it works.
+The 3 second setting works best for me. If you try other setting then check how well it works.
 
 1. create a random alt account
 
